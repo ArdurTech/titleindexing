@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ArdurTech</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">     
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            <img src="{{ url_for('static', filename='logo/ardurtech.png') }}" alt="Ardur Technologies" id="companyLogo">
+        </div>
+        <h4>Data Entry</h4>
+        <div class="header-right">
+            <div class="dropdown">
+                <img src="{{ url_for('static', filename='logo/user.png') }}" alt="User Icon" id="userIcon">
+                <span id="username">{{ username }}</span>
+                <div class="dropdown-content">
+                    <button id="reviewButton" class="dropdown-button">DataEntry Report</button>
+                    <button id="logoutButton" class="logout-button">Logout</button>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay">
+        <div>
+            <img src="{{ url_for('static', filename='logo/loading.gif') }}" alt="Loading">
+            <p>Loading... Please wait</p>
+        </div>
+    </div>
+
+    <!-- Logout Confirmation Popup -->
+    <div id="logoutConfirmation" class="popup-overlay">
+        <div class="popup-content">
+            <p>Are you sure you want to logout?</p>
+            <button id="confirmLogoutButton" class="popup-button">Logout</button>
+            <button id="cancelLogoutButton" class="popup-button">Cancel</button>
+        </div>
+    </div>
+
+    <div id="mainContent">
+        <div class="container">
+            <div id="canvasContainer">
+                <!-- Always Visible Browse Button and File Name -->
+                <div id="browseButtonWrapper">
+                    <label for="fileInput" class="choose-file-button">Browse</label>
+                    <span id="fileName">No file selected</span>
+                </div>
+                <input type="file" id="fileInput" style="display: none;"> <!-- Hidden file input -->
+                <canvas id="leftCanvas"></canvas>
+            </div>
+            <div id="rightTextContainer">
+                <textarea id="extractedText" readonly></textarea>
+            </div>
+        </div>
+
+        <div class="footer-controls">
+            <input type="text" placeholder="Input 1">
+            <input type="text" placeholder="Input 2">
+            <input type="text" placeholder="Input 3">
+            <input type="text" placeholder="Input 4">
+            <input type="text" placeholder="Input 5">
+            <button type="button" id="submitButton" disabled>Submit</button>
+        </div>
+    </div>
+
+    <script>
+        let scale = 1;
+        let originX = 0;
+        let originY = 0;
+        let isDragging = false;
+        let lastX, lastY;
+        let imgWidth, imgHeight;
+        let imageObj;
+        let filepath = ''; // To store the file path
+
+        document.getElementById('fileInput').addEventListener('change', function(event) {
+            // Show loading overlay and blur the background
+            document.getElementById('loadingOverlay').style.display = 'flex';
+            document.getElementById('mainContent').classList.add('blur-background');
+
+            const file = event.target.files[0];
+            const formData = new FormData();
+            formData.append('file', file);
+
+            // Update file name display
+            document.getElementById('fileName').textContent = file.name;
+
+            fetch('/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Hide loading overlay and remove blur
+                document.getElementById('loadingOverlay').style.display = 'none';
+                document.getElementById('mainContent').classList.remove('blur-background');
+
+                if (data.error) {
+                    alert(data.error);
+                } else {
+                    const leftCanvas = document.getElementById('leftCanvas');
+                    const ctxLeft = leftCanvas.getContext('2d');
+                    imageObj = new Image();
+
+                    imageObj.onload = function() {
+                        imgWidth = imageObj.width;
+                        imgHeight = imageObj.height;
+                        leftCanvas.width = imgWidth;
+                        leftCanvas.height = imgHeight;
+                        ctxLeft.drawImage(imageObj, 0, 0);
+                    };
+                    imageObj.src = 'data:image/png;base64,' + data.image;
+                    document.getElementById('extractedText').value = data.text;
+                    filepath = data.filepath; // Store the filepath
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error uploading file');
+            });
+        });
+
+        document.getElementById('extractedText').addEventListener('mouseup', function() {
+        let selectedText = window.getSelection().toString().trim();
+
+        // Ensure a space between words when selection spans across lines
+        selectedText = selectedText.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
+
+        if (selectedText !== '') {
+        const inputs = document.querySelectorAll('input[type="text"]');
+        
+        // For input1 (the first input field)
+        if (!inputs[0].value) {
+            // Remove all non-alphabetical characters except spaces
+            const cleanedText = selectedText.replace(/[^a-zA-Z\s]/g, '').trim();
+
+            // Assuming the name is in "First Middle Last" format
+            const nameParts = cleanedText.split(/\s+/); // Split by spaces
+            
+            if (nameParts.length >= 2) {
+                const firstName = nameParts[0];
+                const lastName = nameParts[nameParts.length - 1];
+                const middleName = nameParts.slice(1, nameParts.length - 1).join(' ');
+
+                // Format: "Last First Middle" (no commas, no periods)
+                const formattedName = `${lastName} ${firstName} ${middleName}`.trim();
+
+                // Set the formatted name in input1
+                inputs[0].value = formattedName;
+            } else {
+                // If it's a single name or the format is incorrect, use the selected text as is
+                inputs[0].value = cleanedText;
+            }
+        } else {
+            // For other input fields
+            for (let i = 1; i < inputs.length; i++) {
+                if (!inputs[i].value) {
+                    inputs[i].value = selectedText;
+                    break;
+                }
+            }
+        }
+    }
+
+        checkInputsFilled(); // Check if all inputs are filled
+    });
+
+
+
+    document.getElementById('submitButton').addEventListener('click', function() {
+    const inputs = document.querySelectorAll('input[type="text"]');
+    const extractedText = document.getElementById('extractedText').value;
+    const leftCanvas = document.getElementById('leftCanvas');
+    const formData = new FormData();
+
+    inputs.forEach((input, index) => {
+        formData.append(`input${index + 1}`, input.value);
+    });
+
+    formData.append('extractedText', extractedText);
+    formData.append('filepath', filepath);  // Send the file path
+
+    // Include base64 of the image in the formData
+    formData.append('imageData', leftCanvas.toDataURL()); 
+
+    fetch('/submit', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Data submitted and saved successfully');
+            // Reset form if needed
+        } else if (data.error) {
+            alert(data.error);
+        }
+        // Clear all fields and containers after successful submission
+        inputs.forEach(input => input.value = '');
+                document.getElementById('extractedText').value = '';
+                document.getElementById('fileInput').value = '';
+                document.getElementById('fileName').textContent = 'No file selected'; // Reset file name display
+                const leftCanvas = document.getElementById('leftCanvas');
+                const ctxLeft = leftCanvas.getContext('2d');
+                ctxLeft.clearRect(0, 0, leftCanvas.width, leftCanvas.height);
+
+                // Clear the image reference to prevent redrawing
+                imageObj = null; // Reset the image object
+                filepath = ''; // Clear the filepath reference
+
+                // Keep the browse button visible
+                document.getElementById('browseButtonWrapper').style.display = 'flex';
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error submitting data');
+    });
+    });
+
+        function checkInputsFilled() {
+            const inputs = document.querySelectorAll('input[type="text"]');
+            const allFilled = Array.from(inputs).every(input => input.value.trim() !== '');
+            document.getElementById('submitButton').disabled = !allFilled;
+        }
+
+        document.getElementById('leftCanvas').addEventListener('mousedown', function(event) {
+            isDragging = true;
+            lastX = event.offsetX;
+            lastY = event.offsetY;
+        });
+
+        document.getElementById('leftCanvas').addEventListener('mouseup', function() {
+            isDragging = false;
+        });
+
+        document.getElementById('leftCanvas').addEventListener('mousemove', function(event) {
+            if (isDragging) {
+                const dx = event.offsetX - lastX;
+                const dy = event.offsetY - lastY;
+                originX += dx;
+                originY += dy;
+                lastX = event.offsetX;
+                lastY = event.offsetY;
+                redrawCanvas();
+            }
+        });
+
+        document.getElementById('leftCanvas').addEventListener('wheel', function(event) {
+            event.preventDefault();
+            const scaleFactor = 0.1;
+            scale += event.deltaY < 0 ? scaleFactor : -scaleFactor;
+            scale = Math.max(0.1, Math.min(scale, 10));
+            redrawCanvas();
+        });
+
+        document.getElementById('logoutButton').addEventListener('click', function() {
+            // Show the logout confirmation popup
+            document.getElementById('logoutConfirmation').style.display = 'flex';
+        });
+
+        document.getElementById('confirmLogoutButton').addEventListener('click', function() {
+            // Redirect to logout URL
+            window.location.href = "{{ url_for('logout') }}";
+        });
+
+        document.getElementById('cancelLogoutButton').addEventListener('click', function() {
+            // Hide the logout confirmation popup
+            document.getElementById('logoutConfirmation').style.display = 'none';
+        });
+
+        document.getElementById('reviewButton').addEventListener('click', function() {
+            window.location.href = "{{ url_for('review') }}";
+        });
+
+        document.querySelector('.dropdown').addEventListener('click', function() {
+            this.querySelector('.dropdown-content').classList.toggle('show');
+        });
+
+        // Close the dropdown if the user clicks outside of it
+        window.onclick = function(event) {
+            if (!event.target.matches('#username')) {
+                var dropdowns = document.getElementsByClassName("dropdown-content");
+                for (var i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.classList.contains('show')) {
+                        openDropdown.classList.remove('show');
+                    }
+                }
+            }
+        };
+
+        function redrawCanvas() {
+            const leftCanvas = document.getElementById('leftCanvas');
+            const ctxLeft = leftCanvas.getContext('2d');
+            ctxLeft.clearRect(0, 0, leftCanvas.width, leftCanvas.height);
+            ctxLeft.save();
+            ctxLeft.translate(originX, originY);
+            ctxLeft.scale(scale, scale);
+            ctxLeft.drawImage(imageObj, 0, 0);
+            ctxLeft.restore();
+        }
+
+    </script>
+</body>
+</html>

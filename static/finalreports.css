@@ -1,0 +1,271 @@
+@import url('https://fonts.googleapis.com/css2?family=Karla:wght@300;400;500;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Karla', sans-serif;
+}
+
+/* Body styling */
+body {
+    background: url('../static/logo/back2.jpg') no-repeat center center fixed; 
+    background-size: cover;
+}
+
+/* Header styling */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #eee2e2a1, #2b8bc236);
+    box-shadow: 0 2px 4px rgba(3, 3, 3, 0.726);
+    width: 100%;
+    height: 48px;
+    box-sizing: border-box;
+}
+
+/* Left section of the header */
+.header-left {
+    display: flex;
+    align-items: center;
+}
+
+#companyLogo {
+    width: 150px;
+    height: auto;
+}
+
+h4 {
+    color: #ffffff;
+}
+
+h2 {
+    color: #ffffff;
+}
+
+/* User icon in header */
+#userIcon {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+/* Right section of the header */
+.header-right {
+    display: flex;
+    align-items: center;
+}
+
+/* Dropdown styling */
+.dropdown {
+    position: relative;
+    display: inline-block;
+    margin-right: 20px;
+    cursor: pointer;
+}
+
+#username {
+    font-weight: bold;
+    padding: 8px 12px;
+    font-size: 15px;
+    color: #000000;
+    background-color: #ffffff;
+    border-radius: 5px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+#username:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+    background-color: #b0d1f5;
+    cursor: pointer;
+}
+
+/* Dropdown content styling */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: #fafafae7;
+    min-width: 200px;
+    border-radius: 8px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    overflow: hidden;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    opacity: 0;
+    transform: translateY(10px);
+}
+
+.dropdown-content.show {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.dropdown-content p {
+    color: #333;
+    padding: 12px 16px;
+    text-decoration: none;
+    margin: 0;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.dropdown-content p:hover {
+    background-color: #f0f0f0;
+    cursor: pointer;
+}
+
+.dropdown-content .logout-button {
+    width: 100%;
+    text-align: left;
+    padding: 12px 16px;
+    background: linear-gradient(135deg, #07270bda, #2b8ac2);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 0 0 8px 8px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 16px;
+    text-align: center;
+}
+
+.dropdown-content .logout-button:hover {
+    background-color: #b71c1c69;
+    transform: scale(1.05);
+}
+
+/* Dropdown button styling */
+.dropdown-button {
+    width: 100%;
+    text-align: left;
+    padding: 12px 16px;
+    background: linear-gradient(135deg, #0056b3, #8dbef1);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 0;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-align: center;
+}
+
+.dropdown-button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.show {
+    display: block;
+}
+
+/* Reports Section */
+#reportsSection {
+    margin: 20px;
+    display: none; /* Initially hidden */
+}
+
+#reportsSection h2 {
+    margin-top: 0;
+}
+
+/* Table styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    background-color: #fff;
+}
+
+table th, table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+table th {
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+table tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Popup styling */
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.popup-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.popup-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin: 5px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.popup-button:hover {
+    background-color: #0056b3;
+}
+
+
+/* Add to lead.css or a new CSS file */
+.download-button {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 10px;
+    background: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.download-button:hover {
+    background-color: #0056b3;
+}
+
+

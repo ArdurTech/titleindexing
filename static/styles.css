@@ -1,0 +1,427 @@
+@import url('https://fonts.googleapis.com/css2?family=Karla:wght@300;400;500;600;700&display=swap');
+*{ 
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Karla', sans-serif;
+} 
+
+/* General body styling */
+body {
+    font-family: Arial, sans-serif;
+    background: url('../static/logo/back2.jpg') no-repeat center center fixed; 
+    background-size: cover;
+    color: #0a0101;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Header styling */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #eee2e2a1, #2b8bc236);
+    box-shadow: 0 2px 4px rgba(3, 3, 3, 0.726);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Left section of the header */
+.header-left {
+    display: flex;
+    align-items: center;
+}
+
+#companyLogo {
+    width: 150px;
+    height: auto;
+}
+
+h4{
+    color: #ffffff;
+}
+
+/* User icon in header */
+#userIcon {
+    width: 30px; /* Adjust size as needed */
+    height: 30px; /* Adjust size as needed */
+    border-radius: 50%; /* Makes the icon circular */
+    margin-right: 8px; /* Spacing between icon and username */
+    vertical-align: middle; /* Aligns icon with text */
+}
+
+#userlogo{
+    width: 30px;
+    height: 27px;
+}
+
+/* Right section of the header */
+.header-right {
+    display: flex;
+    align-items: center;
+}
+
+/* Dropdown styling */
+.dropdown {
+    position: relative;
+    display: inline-block;
+    margin-right: 20px;
+    cursor: pointer;
+}
+
+#username {
+    font-weight: bold;
+    padding: 8px 12px;
+    font-size: 15px;
+    color: #000000; /* White text color for contrast */
+    background-color: #ffffff; /* Brand blue background */
+    border-radius: 5px; /* Fully rounded corners for a pill-shaped appearance */
+    text-transform: uppercase; /* Uppercase text for a bold statement */
+    letter-spacing: 1px; /* Slight spacing between letters for a clean look */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Stronger shadow for emphasis */
+    transition: transform 0.2s ease, box-shadow 0.2s ease; /* Smooth transform on hover */
+}
+
+#username:hover {
+    transform: translateY(-2px); /* Slight lift on hover */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
+    background-color: #b0d1f5; /* Darker blue on hover */
+    cursor: pointer; /* Pointer cursor to indicate interactivity */
+}
+
+/* Dropdown content styling */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: #fafafae7;
+    min-width: 200px;
+    border-radius: 8px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    overflow: hidden;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    opacity: 0;
+    transform: translateY(10px);
+}
+
+.dropdown-content.show {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.dropdown-content p {
+    color: #333;
+    padding: 12px 16px;
+    text-decoration: none;
+    margin: 0;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.dropdown-content p:hover {
+    background-color: #f0f0f0;
+    cursor: pointer;
+}
+
+.dropdown-content .logout-button {
+    width: 100%;
+    text-align: left;
+    padding: 12px 16px;
+    background: linear-gradient(135deg, #07270bda, #2b8ac2); /* Gradient background */
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 0 0 8px 8px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 16px;
+    text-align: center;
+}
+
+.dropdown-content .logout-button:hover {
+    background-color: #b71c1c69; /* Darker red */
+    transform: scale(1.05); /* Slight scale effect */
+}
+
+/* Dropdown button styling */
+.dropdown-button {
+    width: 100%;
+    text-align: left;
+    padding: 12px 16px;
+    background: linear-gradient(135deg, #0056b3, #8dbef1); /* Gradient background */
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 0;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-align: center;
+}
+
+.dropdown-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+    transform: scale(1.05); /* Slight scale effect */
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+
+/* Background blur effect */
+.blur-background {
+    position: relative;
+    filter: blur(5px);
+    transition: filter 0.3s ease;
+}
+
+/* Loading overlay */
+#loadingOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    transition: filter 0.3s ease;
+}
+
+/* Loading message and GIF container */
+#loadingOverlay div {
+    text-align: center;
+}
+
+#loadingOverlay img {
+    width: 90px;
+    height: 80px;
+    display: block;
+    margin: 0 auto;
+}
+
+#loadingOverlay p {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-top: 10px;
+}
+
+/* Main container */
+.container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1500px;
+    margin-top: 20px;
+    gap: 10px;
+}
+
+/* Canvas container styling */
+#canvasContainer {
+    display: grid;
+    position: relative;
+    border-radius: 5px;
+    background: linear-gradient(145deg, #f5f3f3, #ffffff);
+    box-shadow: 0 12px 24px #000000, inset 0 2px 4px rgb(255, 255, 255);
+    width: 48%;
+    height: 85vh;
+    max-width: 100%;
+    overflow: auto;
+}
+
+/* Centered canvas with rounded corners */
+canvas {
+    display: flex;
+    margin: auto;
+    border-radius: 5px;
+    width: 100%;
+    height: 100%;
+}
+
+/* Right text container styling */
+#rightTextContainer {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    width: 50%;
+    height: 85vh;
+    border-radius: 5px;
+    background: linear-gradient(145deg, #ffffff, #ffffffc9);
+    box-shadow: 0 12px 24px rgb(0, 0, 0), inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Extracted text area styling */
+#extractedText {
+    width: 100%;
+    min-height: 100%;
+    padding: 20px;
+    border-radius: 5px;
+    background: linear-gradient(145deg, #ffffff, #ffffff);
+    color: #333;
+    font-size: 16px;
+    font-family: Arial, sans-serif;
+    resize: none;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2), inset 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+}
+
+#browseButtonWrapper {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+}
+
+.choose-file-button {
+    background-color: #008bcc9f;
+    border: none;
+    color: #fff;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 12px;
+}
+
+.choose-file-button:hover {
+    background: linear-gradient(145deg, #272727, #cff1cf);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(233, 210, 210, 0.2);
+}
+
+/* Footer controls (inputs and buttons) */
+.footer-controls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+    width: 100%;
+}
+
+/* Inputs inside the footer controls */
+.footer-controls input {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background: linear-gradient(145deg, #ffffff, #f0f0f0);
+    color: #333;
+    font-size: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    margin: 5px;
+}
+
+/* Placeholder styling for inputs */
+.footer-controls input::placeholder {
+    color: #888;
+}
+
+/* Focus effect for inputs */
+.footer-controls input:focus {
+    outline: none;
+    box-shadow: 0 0 8px #333;
+    background: linear-gradient(145deg, #f0f0f0, #ffffff);
+}
+
+/* Hover effect for inputs */
+.footer-controls input:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Footer controls buttons */
+.footer-controls button {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background: linear-gradient(135deg, #0056b3, #8dbef1);
+    color: rgb(15, 0, 0);
+    font-size: 18px;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    display: inline-block;
+    text-align: center;
+    height: 40px;
+    width: 100px;
+    margin-top: 5px;
+}
+
+.footer-controls button:disabled{
+    background-color: #fffdfd;
+    cursor: not-allowed;
+}
+
+.footer-controls button:hover {
+    background: linear-gradient(145deg, #91b1bb, #135c9b);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(233, 210, 210, 0.2);
+}
+
+/* Popup overlay */
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1001;
+}
+
+/* Popup content styling */
+.popup-content {
+    background: #ffffff;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+}
+
+/* Buttons inside the popup */
+.popup-button {
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    margin: 5px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.popup-button:hover {
+    background-color: #45a049;
+}
+
+/* Custom scrollbar styling */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #888;
+}
+

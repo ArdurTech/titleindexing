@@ -1,0 +1,271 @@
+@import url('https://fonts.googleapis.com/css2?family=Karla:wght@300;400;500;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Karla', sans-serif;
+}
+
+/* General Page Styles */
+body {
+    font-family: Arial, sans-serif;
+    background: url('../static/logo/back2.jpg') no-repeat center center fixed;
+    background-size: cover;
+    margin: 0;
+    padding: 0;
+}
+
+/* Header Styling */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #eee2e2a1, #2b8bc236);
+    box-shadow: 0 2px 4px rgba(3, 3, 3, 0.726);
+    width: 100%;
+    height: 48px;
+    box-sizing: border-box;
+}
+
+/* Left Section of the Header */
+.header-left {
+    display: flex;
+    align-items: center;
+}
+
+#companyLogo {
+    width: 150px;
+    height: auto;
+}
+
+h4 {
+    color: #ffffff;
+}
+
+/* User Icon in Header */
+#userIcon {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+#userlogo {
+    width: 30px;
+    height: 27px;
+}
+
+/* Right Section of the Header */
+.header-right {
+    display: flex;
+    align-items: center;
+}
+
+/* Dropdown Styling */
+.dropdown {
+    position: relative;
+    display: inline-block;
+    margin-right: 20px;
+    cursor: pointer;
+}
+
+#username {
+    font-weight: bold;
+    padding: 8px 12px;
+    font-size: 15px;
+    color: #000000;
+    background-color: #ffffff;
+    border-radius: 5px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+#username:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+    background-color: #b0d1f5;
+    cursor: pointer;
+}
+
+/* Dropdown Content Styling */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: #fafafae7;
+    min-width: 200px;
+    border-radius: 8px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    overflow: hidden;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    opacity: 0;
+    transform: translateY(10px);
+}
+
+.dropdown-content.show {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.dropdown-content p {
+    color: #333;
+    padding: 12px 16px;
+    text-decoration: none;
+    margin: 0;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.dropdown-content p:hover {
+    background-color: #f0f0f0;
+    cursor: pointer;
+}
+
+.dropdown-content .logout-button {
+    width: 100%;
+    text-align: left;
+    padding: 12px 16px;
+    background: linear-gradient(135deg, #07270bda, #2b8ac2);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 0 0 8px 8px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 16px;
+    text-align: center;
+}
+
+.dropdown-content .logout-button:hover {
+    background-color: #b71c1c69;
+    transform: scale(1.05);
+}
+
+/* Dropdown Button Styling */
+.dropdown-button {
+    width: 100%;
+    text-align: left;
+    padding: 12px 16px;
+    background: linear-gradient(135deg, #0056b3, #8dbef1);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 0;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-align: center;
+}
+
+.dropdown-button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* Main Content Styling */
+#mainContent {
+    padding: 20px;
+    background: #ffffff00;
+    border-radius: 8px;
+    max-width: 1800px;
+    margin: 0 auto;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Date Filter Styling */
+#dateFilterContainer {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+
+#dateFilterLabel {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+#dateFilterInput {
+    font-size: 16px;
+    padding: 8px;
+    border: 1px solid #fff8f8;
+    border-radius: 4px;
+}
+
+/* Total Submissions Count */
+#totalCountContainer {
+    margin-bottom: 20px;
+    color: #f4f4f4;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* Table Styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table th, table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+    color: #f4f4f4;
+}
+
+table th {
+    background-color: #f4f4f4;
+    color: #000;
+    font-weight: bold;
+}
+
+/* Popup Styling */
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.popup-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.popup-button {
+    background-color: #022d35;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin: 5px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.popup-button:hover {
+    background-color: #0056b3;
+}

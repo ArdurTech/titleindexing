@@ -1,0 +1,155 @@
+@import url('https://fonts.googleapis.com/css2?family=Karla:wght@300;400;500;600;700&display=swap');
+*{ 
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Karla', sans-serif;
+} 
+
+/* General Styling */
+body {
+    margin: 0;
+    padding: 0;
+    background-image: url('../static/logo/back2.jpg');
+}
+
+header {
+    background: linear-gradient(135deg, #eee2e2a1, #2b8bc236);
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+#companyLogo {
+    height: 27px;
+}
+
+/* Main Content */
+#mainContent {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around; /* Distribute containers evenly in the vertical direction */
+    align-items: center;
+    height: calc(100vh - 50px); /* Adjust height to account for header */
+    padding: 20px;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%; /* Ensure containers take the full width */
+    height: 33%; /* Ensure containers take up one-third of the height */
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin: 5px 0; /* Space between containers */
+    background-position: 10%; /* Center the background image */
+    background-size: 100%;
+}
+
+/* Specific styling for each container */
+#dataEntryContainer {
+    background-image: url('../static/logo/dataentry.jpg'); /* Path to your background image */
+}
+
+#qcContainer {
+    background-image: url('../static/logo/qc.jpg'); /* Path to your background image */
+}
+
+#leadContainer {
+    background-image: url('../static/logo/1.jpg'); /* Path to your background image */
+}
+
+.action-button {
+    color: #fdf8f8;
+    text-decoration: none;
+    background: rgb(0, 0, 0);
+    padding: 10px 15px;
+    font-size: x-large;
+    border-radius: 7px;
+
+} 
+
+.action-button:hover {
+    background: transparent;
+    border: 1px solid #f7f7f7;
+    color: #000000;
+}
+
+.alert-container {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.alert {
+    padding: 15px;
+    background-color: #f44336; /* Red background */
+    color: white;
+    margin-bottom: 15px;
+    border-radius: 5px;
+}
+
+.alert.danger {
+    background-color: #f44336;
+}
+
+/* Style for the modal popup */
+.modal {
+    display: none; 
+    position: fixed;
+    z-index: 1; 
+    padding-top: 100px; 
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto; 
+    background-color: rgb(0,0,0); 
+    background-color: rgba(0,0,0,0.4); 
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+    #companyLogo {
+        height: 40px;
+    }
+
+    .container {
+        width: 90%; /* Adjust width for smaller screens */
+        height: 25%; /* Adjust height for smaller screens */
+    }
+
+    .action-button {
+        padding: 15px 30px; /* Adjust button padding for smaller screens */
+        font-size: 18px;
+    }
+}
+

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            <img src="{{ url_for('static', filename='logo/ardurtech.png') }}" alt="Ardur Technologies" id="companyLogo">
+        </div>
+    </header>
+
+    <div id="mainContent">
+        <div class="container" id="dataEntryContainer">
+            <button class="action-button" id="dataEntryButton">Data Entry</button>
+        </div>
+        <div class="container" id="qcContainer">
+            <button class="action-button" id="qcButton">QC</button>
+        </div>
+        <div class="container" id="leadContainer">
+            <button class="action-button" id="leadButton">Lead</button>
+        </div>
+    </div>
+
+    <!-- Modal popup for showing errors -->
+    <div id="errorModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p id="modalMessage">Access Denied</p>
+        </div>
+    </div>
+
+    <script>
+        // Get the modal
+        var modal = document.getElementById("errorModal");
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        // Close the modal when the user clicks on <span> (x)
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        // Close the modal when the user clicks anywhere outside of the modal
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        function showAccessDenied(message) {
+            document.getElementById('modalMessage').innerText = message;
+            modal.style.display = "block";
+        }
+
+        document.getElementById('dataEntryButton').addEventListener('click', function() {
+            fetch('{{ url_for("check_role_access", role="dataentry") }}')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.access) {
+                        window.location.href = "{{ url_for('index') }}"; 
+                    } else {
+                        showAccessDenied(data.message); 
+                    }
+                });
+        });
+
+        document.getElementById('qcButton').addEventListener('click', function() {
+            fetch('{{ url_for("check_role_access", role="qc") }}')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.access) {
+                        window.location.href = "{{ url_for('qc') }}"; 
+                    } else {
+                        showAccessDenied(data.message); 
+                    }
+                });
+        });
+
+        document.getElementById('leadButton').addEventListener('click', function() {
+            fetch('{{ url_for("check_role_access", role="lead") }}')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.access) {
+                        window.location.href = "{{ url_for('lead') }}"; 
+                    } else {
+                        showAccessDenied(data.message); 
+                    }
+                });
+        });
+    </script>
+</body>
+</html>

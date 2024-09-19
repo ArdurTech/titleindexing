@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review Submissions</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='review.css') }}"> <!-- Link to the new stylesheet -->
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            <img src="{{ url_for('static', filename='logo/ardurtech.png') }}" alt="Ardur Technologies" id="companyLogo">
+        </div>
+        <h4>DataEntry Report</h4>
+        <div class="header-right">
+            <div class="dropdown">
+                <img src="{{ url_for('static', filename='logo/user.png') }}" alt="User Icon" id="userIcon">
+                <span id="username">{{ username }}</span>
+                <div class="dropdown-content">
+                    <button id="homeButton" class="dropdown-button">Home</button>
+                    <button id="logoutButton" class="logout-button">Logout</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div id="mainContent">
+        <!-- Date Filter -->
+        <div id="dateFilterContainer">
+            <!-- <label id="dateFilterLabel" for="dateFilterInput">Select Date:</label> -->
+            <input type="date" id="dateFilterInput">
+        </div>
+
+        <!-- Total Count Display -->
+        <div id="totalCountContainer">Total Submissions: <span id="totalCount">0</span></div>
+
+        <table id="submissionsTable">
+            <thead>
+                <tr>
+                    <th>Sr No</th>
+                    <th>Filename</th>
+                    <th>Input 1</th>
+                    <th>Input 2</th>
+                    <th>Input 3</th>
+                    <th>Input 4</th>
+                    <th>Input 5</th>
+                    <th>DataEntry Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Data will be inserted here by JavaScript -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Logout Confirmation Popup -->
+    <div id="logoutConfirmation" class="popup-overlay">
+        <div class="popup-content">
+            <p>Are you sure you want to logout?</p>
+            <button id="confirmLogoutButton" class="popup-button">Logout</button>
+            <button id="cancelLogoutButton" class="popup-button">Cancel</button>
+        </div>
+    </div>
+
+    <script>
+        // Fetch submissions based on the date
+        function fetchSubmissions(date) {
+            fetch('{{ url_for("get_submissions") }}' + (date ? '?date=' + date : ''))
+                .then(response => response.json())
+                .then(data => {
+                    const tableBody = document.querySelector('#submissionsTable tbody');
+                    tableBody.innerHTML = ''; // Clear any existing data
+
+                    if (data.submissions) {
+                        data.submissions.forEach((submission, index) => {
+                            const row = document.createElement('tr');
+                            row.innerHTML = `
+                                <td>${index + 1}</td>
+                                <td>${submission.filename}</td>
+                                <td>${submission.input1}</td>
+                                <td>${submission.input2}</td>
+                                <td>${submission.input3}</td>
+                                <td>${submission.input4}</td>
+                                <td>${submission.input5}</td>
+                                <td>${new Date(submission.created_time).toLocaleString()}</td>
+                            `;
+                            tableBody.appendChild(row);
+                        });
+
+                        // Update total count
+                        document.getElementById('totalCount').textContent = data.submissions.length;
+                    } else {
+                        tableBody.innerHTML = '<tr><td colspan="8">No submissions found for the selected date.</td></tr>';
+                        document.getElementById('totalCount').textContent = '0';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching submissions:', error);
+                });
+        }
+
+        // Initial fetch for today's submissions
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('dateFilterInput').value = today;
+        fetchSubmissions(today);
+
+        // Handle date change
+        document.getElementById('dateFilterInput').addEventListener('change', function() {
+            const selectedDate = this.value;
+            fetchSubmissions(selectedDate);
+        });
+
+        // JavaScript for handling dropdown functionality
+        document.querySelector('.dropdown').addEventListener('click', function() {
+            this.querySelector('.dropdown-content').classList.toggle('show');
+        });
+
+        // Close the dropdown if the user clicks outside of it
+        window.onclick = function(event) {
+            if (!event.target.matches('#username')) {
+                var dropdowns = document.getElementsByClassName("dropdown-content");
+                for (var i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.classList.contains('show')) {
+                        openDropdown.classList.remove('show');
+                    }
+                }
+            }
+        };
+
+        // JavaScript for logout functionality
+        document.getElementById('logoutButton').addEventListener('click', function() {
+            document.getElementById('logoutConfirmation').style.display = 'flex';
+        });
+
+        document.getElementById('confirmLogoutButton').addEventListener('click', function() {
+            window.location.href = "{{ url_for('logout') }}";
+        });
+
+        document.getElementById('homeButton').addEventListener('click', function() {
+            window.location.href = "{{ url_for('index') }}";
+        });
+
+        document.getElementById('cancelLogoutButton').addEventListener('click', function() {
+            document.getElementById('logoutConfirmation').style.display = 'none';
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QualityCheck</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='qc.css') }}"> <!-- Link to the new stylesheet -->
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            <img src="{{ url_for('static', filename='logo/ardurtech.png') }}" alt="Ardur Technologies" id="companyLogo">
+        </div>
+        <h4>Quality Check</h4>
+        <div class="header-right">
+            <div class="dropdown">
+                <img src="{{ url_for('static', filename='logo/user.png') }}" alt="User Icon" id="userIcon">
+                <span id="username">{{ username }}</span>
+                <div class="dropdown-content">
+                    <button id="reportsButton" class="dropdown-button">Reports</button>
+                    <button id="homeButton" class="dropdown-button">DataEntry</button>
+                    <button id="logoutButton" class="logout-button">Logout</button>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Dropdowns Section -->
+    <div class="dropdowns-container">
+        <!-- New User Dropdown -->
+        <select id="userDropdown" class="dropdown-select">
+            <option value="">Select User</option>
+            <!-- Options will be populated dynamically -->
+        </select>
+        
+        <!-- Existing File Dropdown (updated to depend on the selected user) -->
+        <select id="fileDropdown" class="dropdown-select" enabled>
+            <option value="">Select File</option>
+            <!-- Options will be populated dynamically -->
+        </select>
+    </div>
+
+    <!-- File Details Section -->
+    <div id="fileDetails" >
+        <div class="image-container">
+            <img id="fileImage" src="" alt="">
+        </div>
+        <div id="fileInputs">
+            <!-- Input fields will be dynamically added here -->
+        </div>
+        <!-- Next Button -->
+        <button id="nextButton" style="display: none;">Next</button>
+        <!-- Submit Button (initially hidden) -->
+        <button id="submitButton" style="display: none;">Submit</button>
+    </div>
+    
+    <!-- Logout Confirmation Popup -->
+    <div id="logoutConfirmation" class="popup-overlay">
+        <div class="popup-content">
+            <p>Are you sure you want to logout?</p>
+            <button id="confirmLogoutButton" class="popup-button">Logout</button>
+            <button id="cancelLogoutButton" class="popup-button">Cancel</button>
+        </div>
+    </div>
+
+    <script>
+        let currentIndex = -1;
+        let filenames = [];
+        let selectedUser = '';
+
+        // Fetch and populate the user dropdown
+        async function populateUserDropdown() {
+            try {
+                const response = await fetch('/get_ocr_users');
+                const data = await response.json();
+                const userDropdown = document.getElementById('userDropdown');
+                
+                // Populate user dropdown with fetched usernames
+                if (data.users && data.users.length > 0) {
+                    data.users.forEach(user => {
+                        const option = document.createElement('option');
+                        option.value = user;
+                        option.textContent = user;
+                        userDropdown.appendChild(option);
+                    });
+                } else {
+                    console.log('No users found.');
+                }
+            } catch (error) {
+                console.error('Error fetching users:', error);
+            }
+        }
+
+        // Fetch files for the selected user and populate the file dropdown
+        async function populateFileDropdown(username) {
+            const fileDropdown = document.getElementById('fileDropdown');
+            fileDropdown.innerHTML = '<option value="">Select File</option>'; // Reset file dropdown
+
+            if (username) {
+                const response = await fetch(`/get_files_by_user?username=${username}`);
+                const data = await response.json();
+                filenames = data.files; // Store filenames
+                filenames.forEach(file => {
+                    const option = document.createElement('option');
+                    option.value = file;
+                    option.textContent = file;
+                    fileDropdown.appendChild(option);
+                });
+
+                // Enable file dropdown if files are available
+                if (filenames.length > 0) {
+                    fileDropdown.disabled = false;
+                } else {
+                    fileDropdown.disabled = true;
+                }
+            }
+        }
+
+        // Fetch and display details of the selected file
+        async function displayFileDetails(filename) {
+            const response = await fetch(`/get_file_details?filename=${filename}`);
+            const data = await response.json();
+            
+            if (data.success) {
+                document.getElementById('fileImage').src = `data:image/png;base64,${data.image}`;
+                document.getElementById('fileInputs').innerHTML = `
+                    <label for="input1">Input 1:</label>
+                    <input type="text" id="input1" value="${data.input1}">
+                    <label for="input2">Input 2:</label>
+                    <input type="text" id="input2" value="${data.input2}">
+                    <label for="input3">Input 3:</label>
+                    <input type="text" id="input3" value="${data.input3}">
+                    <label for="input4">Input 4:</label>
+                    <input type="text" id="input4" value="${data.input4}">
+                    <label for="input5">Input 5:</label>
+                    <input type="text" id="input5" value="${data.input5}">
+                    <button id="nextButton">Next</button>
+                    <button id="submitButton" style="display: none;">Submit</button> <!-- Added here -->
+                `;
+
+                // Ensure the fileDetails section is visible
+                document.getElementById('fileDetails').style.display = 'flex';
+
+                // Show the Submit button after a file is opened
+                document.getElementById('submitButton').style.display = 'inline-block';
+                document.getElementById('submitButton').addEventListener('click', async function() {
+                const filename = document.getElementById('fileDropdown').value;
+                const username = document.getElementById('userDropdown').value;
+
+                if (filename && username) {
+                    try {
+                        const formData = new FormData();
+                        formData.append('filename', filename);
+                        formData.append('username', username);
+
+                        // Log the form data to ensure correct values
+                        console.log('Submitting filename:', filename);
+                        console.log('Submitting username:', username);
+
+                        // Perform the fetch request
+                        const response = await fetch('/submit_qc', {
+                            method: 'POST',
+                            body: formData
+                        });
+
+                        // Check response status
+                        if (!response.ok) {
+                            console.error('HTTP error, status =', response.status);
+                            return;
+                        }
+
+                        const result = await response.json();
+
+                        // Log the response from the server
+                        console.log('Response from server:', result);
+
+                        // Check if submission was successful
+                        if (result.success) {
+                            alert('File successfully submitted and moved.');
+
+                            // Automatically open the next file if available
+                            if (result.next_file) {
+                                document.getElementById('fileDropdown').value = result.next_file;
+                                displayFileDetails(result.next_file);
+                            } else {
+                                alert('No more files to process for this user.');
+                                document.getElementById('fileDetails').innerHTML = '';
+                                document.getElementById('submitButton').style.display = 'none';
+                            }
+                        } else {
+                            // Handle error case
+                            console.error(`Error from server: ${result.message}`);
+                            alert(`Error: ${result.message}`);
+                        }
+                    } catch (error) {
+                        // Handle fetch or network error
+                        console.error('Error during submission:', error);
+                        alert('Error occurred while submitting the file.');
+                    }
+                } else {
+                    alert('Please select both a file and a user.');
+                }
+            });
+
+
+
+                // Add event listener to the Next button
+                document.getElementById('nextButton').addEventListener('click', function() {
+                    if (filenames.length > 0) {
+                        currentIndex = (currentIndex + 1) % filenames.length;
+                        const nextFilename = filenames[currentIndex];
+                        document.getElementById('fileDropdown').value = nextFilename;
+                        displayFileDetails(nextFilename);
+                    }
+                });
+            } else {
+                document.getElementById('fileDetails').innerHTML = '<p>Error fetching file details.</p>';
+                document.getElementById('fileDetails').style.display = 'none'; // Hide if error
+            }
+        }
+
+        // Event listener for user dropdown selection
+        document.getElementById('userDropdown').addEventListener('change', function() {
+            selectedUser = this.value;
+            currentIndex = -1;
+            populateFileDropdown(selectedUser);
+        });
+
+        // Event listener for file dropdown selection
+        document.getElementById('fileDropdown').addEventListener('change', function() {
+            const filename = this.value;
+            currentIndex = filenames.indexOf(filename);
+            if (filename) {
+                displayFileDetails(filename);
+            } else {
+                document.getElementById('fileDetails').innerHTML = '';
+                // Hide the Submit button when no file is selected
+                document.getElementById('submitButton').style.display = 'none';
+            }
+        });
+
+        // JavaScript for handling dropdown functionality
+        document.querySelector('.dropdown').addEventListener('click', function() {
+            this.querySelector('.dropdown-content').classList.toggle('show');
+        });
+
+        // Close the dropdown if the user clicks outside of it
+        window.onclick = function(event) {
+            if (!event.target.matches('#username')) {
+                var dropdowns = document.getElementsByClassName('dropdown-content');
+                for (var i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.classList.contains('show')) {
+                        openDropdown.classList.remove('show');
+                    }
+                }
+            }
+        };
+
+        // Logout functionality
+        document.getElementById('logoutButton').addEventListener('click', function() {
+            document.getElementById('logoutConfirmation').style.display = 'flex';
+        });
+
+        document.getElementById('confirmLogoutButton').addEventListener('click', function() {
+            window.location.href = "{{ url_for('logout') }}";
+        });
+
+        document.getElementById('homeButton').addEventListener('click', function() {
+            window.location.href = "{{ url_for('index') }}";
+        });
+
+        document.getElementById('cancelLogoutButton').addEventListener('click', function() {
+            document.getElementById('logoutConfirmation').style.display = 'none';
+        });
+
+        document.getElementById('reportsButton').addEventListener('click', function() {
+            window.location.href = "{{ url_for('qc_reports') }}";
+        });
+
+        
+        // Populate the user dropdown on page load
+        populateUserDropdown();
+
+    </script>
+</body>
+</html>

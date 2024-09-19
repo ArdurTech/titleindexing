@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QC Reports</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='qcreports.css') }}">
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            <img src="{{ url_for('static', filename='logo/ardurtech.png') }}" alt="Ardur Technologies" id="companyLogo">
+        </div>
+        <h4>QC Reports</h4>
+        <div class="header-right">
+            <div class="dropdown">
+                <img src="{{ url_for('static', filename='logo/user.png') }}" alt="User Icon" id="userIcon">
+                <span id="username">{{ username }}</span>
+                <div class="dropdown-content">
+                    <button id="homeButton" class="dropdown-button">DataEntry</button>
+                    <button id="qcButton" class="dropdown-button">QC</button>
+                    <button id="logoutButton" class="logout-button">Logout</button>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Reports Section -->
+<div id="reportsSection">
+    <h2>QC Reports</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Filename</th>
+                <th>QC Check Status</th>
+                <th>QC Done By</th>
+                <th>Qc_Submission_Time</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for report in reports %}
+            <tr>
+                <td>{{ report.username }}</td>
+                <td>{{ report.filename }}</td>
+                <td>{{ report.qc_check }}</td>
+                <td>{{ report.qc_done_by }}</td>
+                <td>{{ report.qc_submission_time }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+    
+    <!-- Logout Confirmation Popup -->
+    <div id="logoutConfirmation" class="popup-overlay">
+        <div class="popup-content">
+            <p>Are you sure you want to logout?</p>
+            <button id="confirmLogoutButton" class="popup-button">Logout</button>
+            <button id="cancelLogoutButton" class="popup-button">Cancel</button>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript for handling dropdown functionality
+        document.querySelector('.dropdown').addEventListener('click', function() {
+            this.querySelector('.dropdown-content').classList.toggle('show');
+        });
+
+        // Close the dropdown if the user clicks outside of it
+        window.onclick = function(event) {
+            if (!event.target.matches('#username')) {
+                var dropdowns = document.getElementsByClassName('dropdown-content');
+                for (var i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.classList.contains('show')) {
+                        openDropdown.classList.remove('show');
+                    }
+                }
+            }
+        };
+
+        // Logout functionality
+        document.getElementById('logoutButton').addEventListener('click', function() {
+            document.getElementById('logoutConfirmation').style.display = 'flex';
+        });
+
+        document.getElementById('confirmLogoutButton').addEventListener('click', function() {
+            window.location.href = "{{ url_for('logout') }}";
+        });
+
+        document.getElementById('homeButton').addEventListener('click', function() {
+            window.location.href = "{{ url_for('index') }}";
+        });
+
+        document.getElementById('qcButton').addEventListener('click', function() {
+            window.location.href = "{{ url_for('qc') }}";
+        });
+
+        document.getElementById('cancelLogoutButton').addEventListener('click', function() {
+            document.getElementById('logoutConfirmation').style.display = 'none';
+        });
+    </script>
+</body>
+</html>

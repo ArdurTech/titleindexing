@@ -1,0 +1,313 @@
+@import url('https://fonts.googleapis.com/css2?family=Karla:wght@300;400;500;600;700&display=swap');
+*{ 
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Karla', sans-serif;
+} 
+
+/* Review Page Styles */
+body {
+    font-family: Arial, sans-serif;
+    background: url('../static/logo/back2.jpg') no-repeat center center fixed; 
+    background-size: cover;
+    margin: 0;
+    padding: 0;
+}
+
+/* Header styling */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #eee2e2a1, #2b8bc236);
+    box-shadow: 0 2px 4px rgba(3, 3, 3, 0.726);
+    width: 100%;
+    height: 48px;
+    box-sizing: border-box;
+}
+
+/* Left section of the header */
+.header-left {
+    display: flex;
+    align-items: center;
+}
+
+#companyLogo {
+    width: 150px;
+    height: auto;
+}
+
+h4{
+    color: #ffffff;
+}
+
+/* User icon in header */
+#userIcon {
+    width: 30px; /* Adjust size as needed */
+    height: 30px; /* Adjust size as needed */
+    border-radius: 50%; /* Makes the icon circular */
+    margin-right: 8px; /* Spacing between icon and username */
+    vertical-align: middle; /* Aligns icon with text */
+}
+
+#userlogo{
+    width: 30px;
+    height: 27px;
+}
+
+/* Right section of the header */
+.header-right {
+    display: flex;
+    align-items: center;
+}
+
+/* Dropdown styling */
+.dropdown {
+    position: relative;
+    display: inline-block;
+    margin-right: 20px;
+    cursor: pointer;
+}
+
+#username {
+    font-weight: bold;
+    padding: 8px 12px;
+    font-size: 15px;
+    color: #000000; /* White text color for contrast */
+    background-color: #ffffff; /* Brand blue background */
+    border-radius: 5px; /* Fully rounded corners for a pill-shaped appearance */
+    text-transform: uppercase; /* Uppercase text for a bold statement */
+    letter-spacing: 1px; /* Slight spacing between letters for a clean look */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Stronger shadow for emphasis */
+    transition: transform 0.2s ease, box-shadow 0.2s ease; /* Smooth transform on hover */
+}
+
+#username:hover {
+    transform: translateY(-2px); /* Slight lift on hover */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
+    background-color: #b0d1f5; /* Darker blue on hover */
+    cursor: pointer; /* Pointer cursor to indicate interactivity */
+}
+
+/* Dropdown content styling */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: #fafafae7;
+    min-width: 200px;
+    border-radius: 8px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    overflow: hidden;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    opacity: 0;
+    transform: translateY(10px);
+}
+
+.dropdown-content.show {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.dropdown-content p {
+    color: #333;
+    padding: 12px 16px;
+    text-decoration: none;
+    margin: 0;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.dropdown-content p:hover {
+    background-color: #f0f0f0;
+    cursor: pointer;
+}
+
+.dropdown-content .logout-button {
+    width: 100%;
+    text-align: left;
+    padding: 12px 16px;
+    background: linear-gradient(135deg, #07270bda, #2b8ac2); /* Gradient background */
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 0 0 8px 8px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 16px;
+    text-align: center;
+}
+
+.dropdown-content .logout-button:hover {
+    background-color: #b71c1c69; /* Darker red */
+    transform: scale(1.05); /* Slight scale effect */
+}
+
+/* Dropdown button styling */
+.dropdown-button {
+    width: 100%;
+    text-align: left;
+    padding: 12px 16px;
+    background: linear-gradient(135deg, #0056b3, #8dbef1); /* Gradient background */
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 0;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-align: center;
+}
+
+.dropdown-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+    transform: scale(1.05); /* Slight scale effect */
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.show {
+    display: block;
+}
+
+/* Popup styling */
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.popup-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.popup-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin: 5px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.popup-button:hover {
+    background-color: #0056b3;
+}
+
+/* Container for dropdowns */
+.dropdowns-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* Space between dropdowns */
+    margin: 20px;
+}
+
+/* Style for individual dropdown selects */
+.dropdown-select {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Styles for the file details section */
+#fileDetails {
+    display: none;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #ddd;
+    margin: 20px;
+    gap: 20px; /* Space between image and inputs */
+}
+
+.file-details-container {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    width: 100%;
+}
+
+.image-container {
+    max-height: 80vh; /* Fit the image to the viewport height */    
+    overflow: auto; /* Enable scrollbars if the image is too large */
+    position: relative; /* Allow absolute positioning for scroll */
+    width: 80%;
+}
+
+#fileImage {
+    display: block;
+    width: 100%; /* Fit the image width to the container */
+    height: auto; /* Maintain the aspect ratio */
+    border: 1px solid #ddd; /* Add a border for better visual separation */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for better depth */
+    object-fit: contain; /* Ensure the image maintains aspect ratio */
+}
+
+#fileInputs {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px; /* Space between input fields */
+}
+
+#fileInputs label {
+    font-weight: bold;
+    color: #ddd;
+    margin-bottom: 4px; /* Space between label and input */
+}
+
+#fileInputs input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px; /* Slightly larger font for better readability */
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1); /* Subtle inset shadow */
+}
+
+#fileInputs input:focus {
+    border-color: #007bff; /* Highlight border on focus */
+    outline: none; /* Remove default outline */
+    box-shadow: 0 0 4px rgba(0, 123, 255, 0.5); /* Highlight shadow */
+}
+
+/* Styles for the Next button */
+#nextButton, #submitButton {
+    background-color: #4CAF50; /* Green background */
+    color: white; /* White text */
+    padding: 10px 20px; /* Padding for size */
+    border: none; /* Remove default border */
+    border-radius: 4px; /* Rounded corners */
+    font-size: 16px; /* Font size */
+    cursor: pointer; /* Pointer cursor on hover */
+    margin-top: 20px; /* Space above the button */;
+    transition: background-color 0.3s ease; /* Smooth transition */
+}
+
+#nextButton, #submitButton:hover {
+    background-color: #5d9960; /* Darker green on hover */
+}
+

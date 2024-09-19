@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Final Reports</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='lead.css') }}">
+    <style>
+        /* Add this CSS to style the circular button and dropdown */
+        #downloadDropdown {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #dropdownButton {
+            background-color: #007bff;
+            border: none;
+            color: white;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s;
+        }
+
+        #dropdownButton:hover {
+            background-color: #0056b3;
+        }
+
+        #dropdownMenu {
+            display: none;
+            position: absolute;
+            bottom: 60px;
+            right: 0;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+        }
+
+        #dropdownMenu a {
+            display: block;
+            padding: 10px 20px;
+            text-decoration: none;
+            color: #007bff;
+        }
+
+        #dropdownMenu a:hover {
+            background-color: #f1f1f1;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            <img src="{{ url_for('static', filename='logo/ardurtech.png') }}" alt="Ardur Technologies" id="companyLogo">
+        </div>
+        <h4>Final Reports</h4>
+        <div class="header-right">
+            <div class="dropdown">
+                <img src="{{ url_for('static', filename='logo/user.png') }}" alt="User Icon" id="userIcon">
+                <span id="username">{{ username }}</span>
+                <div class="dropdown-content">
+                    <button id="leadButton" class="dropdown-button">Lead</button>
+                    <button id="logoutButton" class="logout-button">Logout</button>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Reports Section -->
+    <div id="reportsSection">
+        <h2>Final Reports</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Sr. No.</th>
+                    <th>Username</th>
+                    <th>Filename</th>
+                    <th>Input 1</th>
+                    <th>Input 2</th>
+                    <th>Input 3</th>
+                    <th>Input 4</th>
+                    <th>Input 5</th>
+                    <th>QC Check Status</th>
+                    <th>QC Done By</th>
+                    <th>DataEntry Time</th>
+                    <th>QC Submission Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for report in reports %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ report.username }}</td>
+                    <td>{{ report.filename }}</td>
+                    <td>{{ report.input1 }}</td>
+                    <td>{{ report.input2 }}</td>
+                    <td>{{ report.input3 }}</td>
+                    <td>{{ report.input4 }}</td>
+                    <td>{{ report.input5 }}</td>
+                    <td>{{ report.qc_check }}</td>
+                    <td>{{ report.qc_done_by }}</td>
+                    <td>{{ report.created_time }}</td>
+                    <td>{{ report.qc_submission_time }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Circular Button and Dropdown -->
+    <div id="downloadDropdown">
+        <button id="dropdownButton">🡓</button>
+        <div id="dropdownMenu">
+            <a href="{{ url_for('download_pdf') }}">Download PDF</a>
+            <a href="{{ url_for('download_csv') }}">Download CSV</a>
+            <a href="{{ url_for('download_excel') }}">Download Excel</a>
+        </div>
+    </div>
+
+    <!-- Logout Confirmation Popup -->
+    <div id="logoutConfirmation" class="popup-overlay">
+        <div class="popup-content">
+            <p>Are you sure you want to logout?</p>
+            <button id="confirmLogoutButton" class="popup-button">Logout</button>
+            <button id="cancelLogoutButton" class="popup-button">Cancel</button>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript for handling dropdown functionality
+        document.querySelector('.dropdown').addEventListener('click', function() {
+        this.querySelector('.dropdown-content').classList.toggle('show');
+        });
+
+        // JavaScript for handling dropdown functionality
+        document.getElementById('dropdownButton').addEventListener('click', function() {
+            var dropdownMenu = document.getElementById('dropdownMenu');
+            dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+        });
+
+        // Close the dropdown if the user clicks outside of it
+        window.onclick = function(event) {
+            if (!event.target.matches('#dropdownButton')) {
+                var dropdowns = document.getElementsByClassName('dropdownMenu');
+                for (var i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.style.display === 'block') {
+                        openDropdown.style.display = 'none';
+                    }
+                }
+            }
+        };
+
+        // Logout functionality
+        document.getElementById('logoutButton').addEventListener('click', function() {
+            document.getElementById('logoutConfirmation').style.display = 'flex';
+        });
+
+        document.getElementById('confirmLogoutButton').addEventListener('click', function() {
+            window.location.href = "{{ url_for('logout') }}";
+        });
+
+        document.getElementById('leadButton').addEventListener('click', function() {
+            window.location.href = "{{ url_for('lead') }}";
+        });
+
+        document.getElementById('cancelLogoutButton').addEventListener('click', function() {
+            document.getElementById('logoutConfirmation').style.display = 'none';
+        });
+    </script>
+</body>
+</html>
